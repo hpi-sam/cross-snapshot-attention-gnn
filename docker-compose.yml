@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  csa:
+    build: .
+    image: csa:latest
+    shm_size: '5.02gb'
+    volumes:
+      - ./src:/app/src
+      - ./experiments:/app/experiments
+      - ./tmp:/app/tmp
+      - ./DySAT:/app/DySAT
+      - ./Roland:/app/Roland
+
+  ownership:
+    image: alpine
+    command: /bin/sh -c ' sleep 5 && chown -R 1000:1000 /app/src /app/experiments /app/tmp '
+    # Make sure the env vars are set before the container starts, e.g use . ./set_env.sh
+    environment:
+      - THE_UID=${MY_UID:-1000}
+      - THE_GID=${MY_GID:-1000}
+    volumes:
+      - ./src:/app/src
+      - ./experiments:/app/experiments
+      - ./tmp:/app/tmp
+      - ./DySAT:/app/DySAT
+      - ./Roland:/app/Roland
