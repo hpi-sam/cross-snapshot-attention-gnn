@@ -28,7 +28,6 @@ from src.training.trainer import GNNTrainer
 from src.utils.drawing import get_grid_size, save_fig
 from DySAT.models.model import DySAT, get_model_args
 from Roland.model import ROLAND
-from VGRNN.model import VGRNN
 
 
 class ClassificationModel(Enum):
@@ -233,23 +232,6 @@ class ClassificationModel(Enum):
             ).train(epochs=30),
         )[-1]
     }
-    VGRNN = {
-        "run": lambda dataset, path: (
-            model := VGRNN(
-                x_dim=14,
-                h_dim=64,
-                z_dim=64,
-                eps=1e-10,
-                n_layers=1,
-                num_classes=len(dataset.labels),
-            ),
-            GNNTrainer(
-                model=model,
-                dataset=dataset,
-                transform=TemporalSnapshotListOneHotTransform,
-            ).train(epochs=30),
-        )[-1]
-    }
 
 
 def analyze_results(results: pd.DataFrame, path: str):
@@ -345,7 +327,6 @@ def get_models():
         ClassificationModel.DY_SAT_SINGLE,
         # ClassificationModel.ROLAND,
         # ClassificationModel.ROLAND_SINGLE,
-        # ClassificationModel.VGRNN,
     ]
 
 
